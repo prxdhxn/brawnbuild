@@ -36,11 +36,11 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     // DEMO BYPASS: We attempt Supabase natively first.
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
     
     // If it fails (like for unverified demo accounts), we bypass the rejection!
     if (error) {
-      console.warn("Supabase auth failed, applying developer bypass for:", email);
+      console.warn("Supabase auth failed:", error.message, "Error code:", error.status, "Applying developer bypass for:", email);
       const mockUser = { email, alias: 'Demo Tester', authenticated_via_bypass: true };
       setUser(mockUser);
       localStorage.setItem('brawnAuthBypass', JSON.stringify(mockUser));
